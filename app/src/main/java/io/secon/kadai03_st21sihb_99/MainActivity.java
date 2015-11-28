@@ -9,16 +9,13 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.text.DecimalFormat;
-
 
 public class MainActivity extends ActionBarActivity {
 	
 	private TextView disp;
 	private double num;
-    private int intNum;
+    private String calcState;
     private boolean calcFlg;
-    private boolean doubleFlg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +48,7 @@ public class MainActivity extends ActionBarActivity {
         disp = (TextView)findViewById(R.id.disp);
 
         clearDisp();
+        calcState = "";
         calcFlg = false;
 
         for(int i=0; i<numBtn.length; i++){
@@ -148,6 +146,7 @@ public class MainActivity extends ActionBarActivity {
 
     private void calcBtnClicked(View v) {
         Button calcBtn = (Button)v;
+        calcState = calcBtn.getText().toString();
         if(!calcFlg) {
             num = Double.parseDouble(disp.getText().toString());
         }else{
@@ -162,7 +161,15 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void calcExec() {
-    	num += Double.parseDouble(disp.getText().toString());
+        if(calcState.equals("+")) {
+            num += Double.parseDouble(disp.getText().toString());
+        }else if(calcState.equals("-")) {
+            num -= Double.parseDouble(disp.getText().toString());
+        }else if(calcState.equals("×")) {
+            num *= Double.parseDouble(disp.getText().toString());
+        }else if(calcState.equals("÷")) {
+            num /= Double.parseDouble(disp.getText().toString());
+        }
         if(num % 1 == 0) {
             disp.setText(String.valueOf((int) num));
         }else{
