@@ -22,10 +22,11 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
-        Button sumBtn, diffBtn, productBtn, quoteBtn, equalBtn, clearBtn, periodBtn;
+        Button sumBtn, diffBtn, productBtn, quoteBtn, equalBtn, clearBtn, periodBtn,backBtn;
 
         Button[] numBtn = new Button[10];
 
+        // num buttons
         numBtn[0] = (Button)findViewById(R.id.num0);
         numBtn[1] = (Button)findViewById(R.id.num1);
         numBtn[2] = (Button)findViewById(R.id.num2);
@@ -37,6 +38,7 @@ public class MainActivity extends ActionBarActivity {
         numBtn[8] = (Button)findViewById(R.id.num8);
         numBtn[9] = (Button)findViewById(R.id.num9);
 
+        // operateButtons
         sumBtn = (Button)findViewById(R.id.sumBtn);
         diffBtn = (Button)findViewById(R.id.diffBtn);
         productBtn = (Button)findViewById(R.id.productBtn);
@@ -45,12 +47,15 @@ public class MainActivity extends ActionBarActivity {
         periodBtn = (Button)findViewById(R.id.periodBtn);
 
         clearBtn = (Button)findViewById(R.id.clearBtn);
+        backBtn = (Button)findViewById(R.id.backBtn);
         disp = (TextView)findViewById(R.id.disp);
 
-        clearDisp();
-        calcState = "";
+        // initialize
+        clearDisp();	 // set 0 in display
+        calcState = "+"; // first operate is 0 + inputnum
         calcFlg = false;
 
+        // set listner on num buttons
         for(int i=0; i<numBtn.length; i++){
         	numBtn[i].setOnClickListener(new OnClickListener() {
 
@@ -62,15 +67,18 @@ public class MainActivity extends ActionBarActivity {
 			});
         }
 
+        // clear btn listner
         clearBtn.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				clearDisp();
+				initialize();
 			}
 		});
 
+        // operat buttons listner
+        // +
         sumBtn.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -80,6 +88,7 @@ public class MainActivity extends ActionBarActivity {
 			}
 		});
 
+        // -
         diffBtn.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -89,6 +98,7 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
+        // *
         productBtn.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -98,6 +108,7 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
+        // /
         quoteBtn.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -107,6 +118,7 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
+        // =
         equalBtn.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -116,25 +128,43 @@ public class MainActivity extends ActionBarActivity {
 			}
 		});
 
+        // .
         periodBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 periodBtnClicked(v);
             }
         });
+        
+        // <-
+        backBtn.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				backDisp();
+				if(disp.getText().length() == 0){
+					clearDisp();
+				}
+			}
+		});
     }
 
+    // backspace
     private void backDisp() {
         disp.setText(disp.getText().toString().substring(0, disp.getText().length()-1));
     }
     
+    // num button
     private void numBtnClicked(View v) {
     	Button numBtn = (Button)v;
 
-        if(disp.getText().toString() == "0") {
+    	// delete 0
+        if(disp.getText().toString().equals("0")) {
             backDisp();
         }
 
+        // clear display
         if(calcFlg == true) {
             clearDisp();
             backDisp();
@@ -144,23 +174,24 @@ public class MainActivity extends ActionBarActivity {
         calcFlg = false;
     }
 
+    // calculate btn clicked
     private void calcBtnClicked(View v) {
         Button calcBtn = (Button)v;
-        calcState = calcBtn.getText().toString();
-        if(!calcFlg) {
-            num = Double.parseDouble(disp.getText().toString());
-        }else{
-            backDisp();
+        
+        // should not operate when pressed consecutively
+        if(!calcFlg){
+        	calc();
         }
-        disp.setText(disp.getText().toString() + calcBtn.getText().toString());
-        calcFlg = true;
+        	
+        num = Double.parseDouble(disp.getText().toString());
+        calcState = calcBtn.getText().toString();
+        calcFlg = true; // controle consecutive operator
     }
 
-    private void periodBtnClicked(View v) {
-        disp.setText(disp.getText().toString() + ".");
-    }
-
-    private void calcExec() {
+    // calculate
+    private void calc() {
+    	
+    	//check operator
         if(calcState.equals("+")) {
             num += Double.parseDouble(disp.getText().toString());
         }else if(calcState.equals("-")) {
@@ -170,15 +201,40 @@ public class MainActivity extends ActionBarActivity {
         }else if(calcState.equals("÷")) {
             num /= Double.parseDouble(disp.getText().toString());
         }
-        if(num % 1 == 0) {
-            disp.setText(String.valueOf((int) num));
-        }else{
-            disp.setText(String.valueOf(num));
-        }
+        format();
+    }
+    
+    // execute
+    private void calcExec() {
+    	calc();
+    	num = 0;
+    }
+    
+    // format
+    private void format() {
+    	if(num % 1 == 0) {
+    		disp.setText(String.valueOf((int) num));
+    	}else{
+    		disp.setText(String.valueOf(num));
+    	}
+    }
+    
+    // set period
+    private void periodBtnClicked(View v) {
+        disp.setText(disp.getText().toString() + ".");
     }
 
+
+    // display initialize
     private void clearDisp() {
     	disp.setText("0");
+    }
+    
+    // status initialize
+    private void initialize() {
+    	clearDisp();
+    	num = 0;
+    	calcState = "+";
     }
 
     @Override

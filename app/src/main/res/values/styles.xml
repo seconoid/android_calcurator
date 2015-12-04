@@ -18,6 +18,9 @@
     </style>
     
     <color name="dispBg">#0d0d0d</color>
-    <color name="disp">#f1f1f1</color>
+    <color name="disp">#f7f7f7</color>
+    <color name="bg">#606060</color>
+    <color name="btnStr">#f7f7f7</color>
+    <color name="btnBg">#a1a1a1</color>
 
 </resources>
