@@ -237,7 +237,7 @@ public class MainActivity extends ActionBarActivity {
     // set period
     private void periodBtnClicked(View v) {
         // period is only one
-        if(disp.getText().toString().contains(".")) {
+        if(!disp.getText().toString().contains(".")) {
             disp.setText(disp.getText().toString() + ".");
         }
     }
