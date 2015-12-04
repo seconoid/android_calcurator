@@ -9,6 +9,8 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.math.BigDecimal;
+
 
 public class MainActivity extends ActionBarActivity {
 	
@@ -38,12 +40,13 @@ public class MainActivity extends ActionBarActivity {
         numBtn[8] = (Button)findViewById(R.id.num8);
         numBtn[9] = (Button)findViewById(R.id.num9);
 
-        // operateButtons
+        // calcButtons
         sumBtn = (Button)findViewById(R.id.sumBtn);
         diffBtn = (Button)findViewById(R.id.diffBtn);
         productBtn = (Button)findViewById(R.id.productBtn);
         quoteBtn = (Button)findViewById(R.id.quoteBtn);
         equalBtn = (Button)findViewById(R.id.equalBtn);
+
         periodBtn = (Button)findViewById(R.id.periodBtn);
 
         clearBtn = (Button)findViewById(R.id.clearBtn);
@@ -190,16 +193,18 @@ public class MainActivity extends ActionBarActivity {
 
     // calculate
     private void calc() {
+        BigDecimal big1 = BigDecimal.valueOf(num);
+        BigDecimal big2 = new BigDecimal(disp.getText().toString());
     	
     	//check operator
         if(calcState.equals("+")) {
-            num += Double.parseDouble(disp.getText().toString());
+            num = big1.add(big2).doubleValue();
         }else if(calcState.equals("-")) {
-            num -= Double.parseDouble(disp.getText().toString());
+            num = big1.subtract(big2).doubleValue();
         }else if(calcState.equals("×")) {
-            num *= Double.parseDouble(disp.getText().toString());
+            num = big1.multiply(big2).doubleValue();
         }else if(calcState.equals("÷")) {
-            num /= Double.parseDouble(disp.getText().toString());
+            num = big1.divide(big2, 10, BigDecimal.ROUND_HALF_UP).doubleValue();
         }
         format();
     }
@@ -218,7 +223,7 @@ public class MainActivity extends ActionBarActivity {
     		disp.setText(String.valueOf(num));
     	}
     }
-    
+
     // set period
     private void periodBtnClicked(View v) {
         disp.setText(disp.getText().toString() + ".");
