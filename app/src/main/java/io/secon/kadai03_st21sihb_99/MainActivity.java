@@ -18,6 +18,7 @@ public class MainActivity extends ActionBarActivity {
 	private double num;
     private String calcState;
     private boolean calcFlg;
+    private boolean equalFlg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +48,7 @@ public class MainActivity extends ActionBarActivity {
         quoteBtn = (Button)findViewById(R.id.quoteBtn);
         equalBtn = (Button)findViewById(R.id.equalBtn);
 
+        // decimal
         periodBtn = (Button)findViewById(R.id.periodBtn);
 
         clearBtn = (Button)findViewById(R.id.clearBtn);
@@ -168,8 +170,14 @@ public class MainActivity extends ActionBarActivity {
         }
 
         // clear display
-        if(calcFlg == true) {
+        if(calcFlg) {
             clearDisp();
+            backDisp();
+        }
+
+        // initialize
+        if(equalFlg) {
+            initialize();
             backDisp();
         }
 
@@ -189,6 +197,7 @@ public class MainActivity extends ActionBarActivity {
         num = Double.parseDouble(disp.getText().toString());
         calcState = calcBtn.getText().toString();
         calcFlg = true; // controle consecutive operator
+        equalFlg = false;
     }
 
     // calculate
@@ -212,7 +221,8 @@ public class MainActivity extends ActionBarActivity {
     // execute
     private void calcExec() {
     	calc();
-    	num = 0;
+        equalFlg = true;
+        calcState = "";
     }
     
     // format
@@ -240,6 +250,7 @@ public class MainActivity extends ActionBarActivity {
     	clearDisp();
     	num = 0;
     	calcState = "+";
+        equalFlg = false;
     }
 
     @Override
